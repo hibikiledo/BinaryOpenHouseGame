@@ -6,6 +6,7 @@ from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from random import randint
 
+import button
 import time
 import threading
 
@@ -185,9 +186,32 @@ class GameUI(BoxLayout):
         p1_values = ["1" if state else "0" for state in player1_bits]
         p2_values = ["1" if state else "0" for state in player2_bits]
         # Update label representing answer for each player
-        self.ids['player_one_number'].text = ' '.join(p1_values)
-        self.ids['player_two_number'].text = ' '.join(p2_values)
-        
+
+        # ROBROO DEBUG
+        # self.ids['player_one_number'].text = ' '.join(p1_values)
+        # self.ids['player_two_number'].text = ' '.join(p2_values)
+
+
+        if not self.is_one_submit and not self.is_two_submit:
+            self.ids['player_one_number'].text = ' '.join(p1_values)
+            self.ids['player_one_number'].markup = True
+            self.ids['player_two_number'].text = ' '.join(p2_values)
+            self.ids['player_two_number'].markup = True
+        elif self.is_one_submit and not self.is_two_submit:
+            self.ids['player_one_number'].text = '[color=868686]' + ' '.join(p1_values) + '[/color]'
+            self.ids['player_one_number'].markup = True
+            self.ids['player_two_number'].text = ' '.join(p2_values)
+            self.ids['player_two_number'].markup = True
+        elif not self.is_one_submit and self.is_two_submit:
+            self.ids['player_one_number'].text = ' '.join(p1_values)
+            self.ids['player_one_number'].markup = True
+            self.ids['player_two_number'].text = '[color=868686]' + ' '.join(p2_values) + '[/color]'
+            self.ids['player_two_number'].markup = True
+        else:
+            self.ids['player_one_number'].text = '[color=868686]' + ' '.join(p1_values) + '[/color]'
+            self.ids['player_one_number'].markup = True
+            self.ids['player_two_number'].text = '[color=868686]' + ' '.join(p2_values) + '[/color]'
+            self.ids['player_two_number'].markup = True
 
     # Handle submit button_stage
     # When button state is HIGH, append player to submited_array
@@ -224,13 +248,13 @@ class GameUI(BoxLayout):
         # Both players give correct answer
         if player1_final_answer == correct_answer and player2_final_answer == correct_answer:
             # Break tie with index of submited_array
-            self.ids['top_layout'].text  = '[color=33ff99]' + str(self.submited_array[0]) + "WON!!" + '[/color]'
+            self.ids['top_layout'].text  = '[color=99ff33]' + str(self.submited_array[0]) + " WON!!" + '[/color]'
         # Only player 1 gives correct answer
         elif correct_answer == player1_final_answer:
-            self.ids['top_layout'].text  = '[color=33ff99]Player 1 Won[/color]'
+            self.ids['top_layout'].text  = '[color=99ff33]Player 1 Won[/color]'
         # Only player 2 gives correct answer            
         elif correct_answer == player2_final_answer:
-            self.ids['top_layout'].text  = '[color=33ff99]Player 2 Won[/color]'
+            self.ids['top_layout'].text  = '[color=99ff33]Player 2 Won[/color]'
         # None of them gives correct answer
         else:
             self.ids['top_layout'].text = '[color=ff3333]DRAW[/color]'
