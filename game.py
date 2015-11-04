@@ -60,44 +60,54 @@ class GameUI(BoxLayout):
         
         if not self.is_key_down:
 
+            #for player one hit
             if keycode[1] == 'z':
                 self.player1_btn_states[0] = True
             elif keycode[1] == 'x':
                 self.player1_btn_states[1] = True
             elif keycode[1] == 'c':
                 self.player1_btn_states[2] = True
+
+            #for player 2 hit
             elif keycode[1] == 'm':
-                self.player1_btn_states[3] = True
+                self.player2_btn_states[0] = True
             elif keycode[1] == ',':
-                self.player2_btn_states[4] = True
+                self.player2_btn_states[1] = True
             elif keycode[1] == '.':
-                self.player2_btn_states[5] = True
+                self.player2_btn_states[2] = True
+
+            #for both player submit hit
             elif keycode[1] == 'v':
-                self.player2_btn_states[6] = True
+                self.player1_btn_states[3] = True
             elif keycode[1] == '/':
-                self.player2_btn_states[7] = True
+                self.player2_btn_states[3] = True
                 
             # update keydown flag
             self.is_key_down = True
             
     def _on_keyboard_up(self, keyboard, keycode):
-        
+
+        #for player 1 release
         if keycode[1] == 'z':
             self.player1_btn_states[0] = False
         elif keycode[1] == 'x':
             self.player1_btn_states[1] = False
         elif keycode[1] == 'c':
             self.player1_btn_states[2] = False
+
+        #for player 2 release
         elif keycode[1] == 'm':
-            self.player1_btn_states[3] = False
+            self.player2_btn_states[0] = False
         elif keycode[1] == ',':
-            self.player2_btn_states[4] = False
+            self.player2_btn_states[1] = False
         elif keycode[1] == '.':
-            self.player2_btn_states[5] = False
+            self.player2_btn_states[2] = False
+
+        #for player 1 ans 2 release submit
         elif keycode[1] == 'v':
-            self.player2_btn_states[6] = False
+            self.player1_btn_states[3] = False
         elif keycode[1] == '/':
-            self.player2_btn_states[7] = False
+            self.player2_btn_states[3] = False
                 
         # reset key_down flag
         self.is_key_down = False
@@ -106,8 +116,8 @@ class GameUI(BoxLayout):
         
         previous_states = [False for i in range(8)]
 
-        player1_prev_states = previous_states[:3]
-        player2_prev_states = previous_states[3:]
+        player1_prev_states = previous_states[:4]
+        player2_prev_states = previous_states[4:]
         
         while True:
             
@@ -123,16 +133,18 @@ class GameUI(BoxLayout):
 
             print states
             
-            player1_current_states = states[:3]
-            player2_current_states = states[3:]
+            player1_current_states = states[:4]
+            print "player 1 current state", player1_current_states
+            player2_current_states = states[4:]
+            print "player 2 current state", player2_current_states
             
-            
-            
+            #check state change for bot player and their new state must also be HIGH
+	    #it is showing that state of buttons changed from unpressed to pressed 
             for i in range(len(player1_current_states)):
-                if player1_current_states[i] != player1_prev_states[i]:
+                if (player1_current_states[i] != player1_prev_states[i]) and (player1_current_states[i] == True):
                     self.player1_answer[i] = not self.player1_answer[i]
             for i in range(len(player2_current_states)):
-                if player2_current_states[i] != player2_prev_states[i]:
+                if (player2_current_states[i] != player2_prev_states[i]) and (player2_current_states[i] == True):
                     self.player2_answer[i] = not self.player2_answer[i]
                     
             player1_prev_states = player1_current_states
@@ -141,7 +153,8 @@ class GameUI(BoxLayout):
             
             # Handle submission buttons
             # We check if we have winner here
-            self.handle_submit_btn(states[6], states[7])
+            # we use 3 and 7 becase they are the last button of both players
+            self.handle_submit_btn(states[3], states[7])
             
             # Update label for each player to match current players' answer
             self.update_labels()
