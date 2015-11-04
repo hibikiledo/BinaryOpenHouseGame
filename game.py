@@ -132,7 +132,10 @@ class GameUI(BoxLayout):
          
 
             print states
-            
+            print "for second round check p1 prev",player1_prev_states
+            print "for second round check p2 prew",player2_prev_states
+
+
             player1_current_states = states[:4]
             print "player 1 current state", player1_current_states
             player2_current_states = states[4:]
@@ -223,8 +226,8 @@ class GameUI(BoxLayout):
         self.reset()
         
     def reset(self):
-        self.player1_answer = (False, False, False, False)
-        self.player2_answer = (False, False, False, False)
+        self.player1_answer = [False, False, False, False]
+        self.player2_answer = [False, False, False, False]
     
         self.submited_one = False
         self.submited_two = False
