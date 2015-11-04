@@ -19,7 +19,9 @@ class GameUI(BoxLayout):
     # [3] : confirm button
     player1_answer = [False, False, False, False]
     player2_answer = [False, False, False, False]
-    
+    #is player submit check
+    is_one_submit = False
+    is_two_submit = False
     # variables to store whether each player has pressed
     # submit button or not
     submited_one = False
@@ -27,7 +29,7 @@ class GameUI(BoxLayout):
     submited_array = []
     
     # variable to store number of match count left
-    match_count = 3
+    #match_count = 3
     
     # variable to store if key is being pressed
     is_key_down = False
@@ -143,12 +145,15 @@ class GameUI(BoxLayout):
             
             #check state change for bot player and their new state must also be HIGH
 	        #it is showing that state of buttons changed from unpressed to pressed
-            for i in range(len(player1_current_states)):
-                if (player1_current_states[i] != player1_prev_states[i]) and (player1_current_states[i] == True):
-                    self.player1_answer[i] = not self.player1_answer[i]
-            for i in range(len(player2_current_states)):
-                if (player2_current_states[i] != player2_prev_states[i]) and (player2_current_states[i] == True):
-                    self.player2_answer[i] = not self.player2_answer[i]
+            if not self.is_one_submit:
+                for i in range(len(player1_current_states)):
+                    if (player1_current_states[i] != player1_prev_states[i]) and (player1_current_states[i] == True):
+                        self.player1_answer[i] = not self.player1_answer[i]
+
+            if not self.is_two_submit:
+                for i in range(len(player2_current_states)):
+                    if (player2_current_states[i] != player2_prev_states[i]) and (player2_current_states[i] == True):
+                        self.player2_answer[i] = not self.player2_answer[i]
                     
             player1_prev_states = player1_current_states
             player2_prev_states = player2_current_states
@@ -165,7 +170,7 @@ class GameUI(BoxLayout):
             # If both players has submit their result, check for winner
             print "this is the submitted array", self.submited_array
             if len(self.submited_array) == 2:
-                self.match_count -= 1
+                #self.match_count -= 1
                 self.check_winner()
             
             '''
@@ -178,8 +183,10 @@ class GameUI(BoxLayout):
     # Update binary text on screen to reflect current answer of each player
     def update_labels(self):
         # Convert True/False values into 0 or 1 ( O for false and 1 for true )
-        p1_values = ["1" if state else "0" for state in self.player1_answer]
-        p2_values = ["1" if state else "0" for state in self.player2_answer]
+        player1_bits = self.player1_answer[0:3]
+        player2_bits = self.player2_answer[0:3]
+        p1_values = ["1" if state else "0" for state in player1_bits]
+        p2_values = ["1" if state else "0" for state in player2_bits]
         # Update label representing answer for each player
         self.ids['player_one_number'].text = ' '.join(p1_values)
         self.ids['player_two_number'].text = ' '.join(p2_values)
@@ -193,19 +200,23 @@ class GameUI(BoxLayout):
         # we append if and only if it was not append before
         if (submit1) and ("Player 1" not in self.submited_array):
             self.submited_array.append("Player 1")
+            self.is_one_submit = True
         elif (submit2) and ("Player 2" not in self.submited_array):
             self.submited_array.append("Player 2")
-    
+            self.is_two_submit = True
     # This function show winner by checking each player's answer
     # with self.rand_number
     def check_winner(self):
         # Variable to keep correct answer
         correct_answer = self.rand_number
-        
+        print "correct ans", correct_answer
+
         # Calculate answer in decimal number
         player1_final_answer = (self.player1_answer[0] * 4) + (self.player1_answer[1] * 2) + (self.player1_answer[2] * 1)
         player2_final_answer = (self.player2_answer[0] * 4) + (self.player2_answer[1] * 2) + (self.player2_answer[2] * 1)
-        
+
+        print "player one ans ",player1_final_answer
+        print "player two ans ",player2_final_answer
         # Both players give correct answer
         if player1_final_answer == correct_answer and player2_final_answer == correct_answer:
             # Break tie with index of submited_array
@@ -232,7 +243,8 @@ class GameUI(BoxLayout):
         self.submited_one = False
         self.submited_two = False
         self.submited_array = []
-        
+        self.is_one_submit = False
+        self.is_two_submit = False
         self.random()       
         
     # Generate random number and set to Layout
