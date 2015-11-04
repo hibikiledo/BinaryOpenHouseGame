@@ -48,7 +48,7 @@ class GameUI(BoxLayout):
         
         # Generate random number
         self.random()
-
+        self.ids['top_layout'].markup = True
         # Start game loop on another thread
         threading.Thread(target=self.super_loop, args=()).start()
         
@@ -130,13 +130,10 @@ class GameUI(BoxLayout):
             
             # Current states
             states = self.player1_btn_states + self.player2_btn_states
-            
-         
 
             print states
             print "for second round check p1 prev",player1_prev_states
             print "for second round check p2 prew",player2_prev_states
-
 
             player1_current_states = states[:4]
             print "player 1 current state", player1_current_states
@@ -201,9 +198,16 @@ class GameUI(BoxLayout):
         if (submit1) and ("Player 1" not in self.submited_array):
             self.submited_array.append("Player 1")
             self.is_one_submit = True
+            self.ids['player_one_stat'].text = '[color=3399ff]SUBMITTED[/color]'
+            self.ids['player_one_stat'].markup = True
+
         elif (submit2) and ("Player 2" not in self.submited_array):
             self.submited_array.append("Player 2")
             self.is_two_submit = True
+            self.ids['player_two_stat'].text = '[color=3399ff]SUBMITTED[/color]'
+            self.ids['player_two_stat'].markup = True
+
+
     # This function show winner by checking each player's answer
     # with self.rand_number
     def check_winner(self):
@@ -220,16 +224,16 @@ class GameUI(BoxLayout):
         # Both players give correct answer
         if player1_final_answer == correct_answer and player2_final_answer == correct_answer:
             # Break tie with index of submited_array
-            self.ids['top_layout'].text  = str(self.submited_array[0]) + "WON!!"
+            self.ids['top_layout'].text  = '[color=33ff99]' + str(self.submited_array[0]) + "WON!!" + '[/color]'
         # Only player 1 gives correct answer
         elif correct_answer == player1_final_answer:
-            self.ids['top_layout'].text  = str("Player 1 WON!!")
+            self.ids['top_layout'].text  = '[color=33ff99]Player 1 Won[/color]'
         # Only player 2 gives correct answer            
         elif correct_answer == player2_final_answer:
-            self.ids['top_layout'].text  = str("Player 2 WON!!")
+            self.ids['top_layout'].text  = '[color=33ff99]Player 2 Won[/color]'
         # None of them gives correct answer
         else:
-            self.ids['top_layout'].text = "DRAW"
+            self.ids['top_layout'].text = '[color=ff3333]DRAW[/color]'
         
         # Let player feels the pain for 5 seconds
         time.sleep(5)
@@ -245,10 +249,13 @@ class GameUI(BoxLayout):
         self.submited_array = []
         self.is_one_submit = False
         self.is_two_submit = False
-        self.random()       
-        
+        self.random()
+
+        self.ids['player_one_stat'].text = ''
+        self.ids['player_two_stat'].text = ''
+
     # Generate random number and set to Layout
-    # we can access random number via self.rand_number
+    # we can access random number via selxz.rand_number
     def random(self):
         self.rand_number = randint(1,7)
         self.ids['top_layout'].text  = str(self.rand_number)

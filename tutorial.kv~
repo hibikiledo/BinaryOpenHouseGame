@@ -2,8 +2,7 @@
 	orientation:'vertical'
 	Label:
 		id:top_layout
-		font_name: 'DS-DIGI.TTF'
-		font_size: 300
+		font_size: 150
 		height: 300
 		text: 'default'
 	BoxLayout:
@@ -12,23 +11,25 @@
 			orientation: 'vertical'
 			Label:
 				id: player_one_stat
-				font_name: 'digitalix.ttf'
 				font_size: 30
 				text: ''
 			Label:
 				id: player_one_number
-				font_name: 'DS-DIGI.TTF'
-				font_size: 150
+				font_size: 80
 				text: 'x x x'
+			Label: 
+				font_size:80
+				text: '_ _ _'
 		BoxLayout:
 			orientation:'vertical'
 			Label:
 				id: player_two_stat
-				font_name: 'digitalix.ttf'
 				font_size: 30
 				text: ''
 			Label:
 				id: player_two_number
-				font_name: 'DS-DIGI.TTF'				
-				font_size: 150
+				font_size:80
 				text: 'x x x'
+			Label:
+				font_size:80
+				text: '_ _ _'
